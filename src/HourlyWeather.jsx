@@ -37,7 +37,7 @@ const HourlyWeather = () => {
   return (
     <>
       <h3>Hourly</h3>
-      <div className="container">
+      <div className="container2">
         {hourlyForecast.length > 0 ? (
           hourlyForecast.map((dataTime, index) => {
             const rawDate = new Date(dataTime.dt * 1000);

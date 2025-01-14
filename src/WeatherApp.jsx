@@ -8,9 +8,9 @@ const WeatherApp = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [weather, setWeather] = useState(null);
   const { city, setCity } = useCity();
-  const [ icon, setIcon ] = useState("");
+  const [icon, setIcon] = useState("");
 
-  const fetchWeather = async (city) => {
+   const fetchWeather = async (city) => {
     try {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a3a03a15b0bafa2ba0a52f19baf4c6fe&units=metric`
@@ -32,13 +32,39 @@ const WeatherApp = () => {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "dark"
+      : "light";
+    if (
+      savedTheme === "dark" ||
+      (savedTheme === null && systemTheme === "dark")
+    ) {
       document.body.classList.add("dark-theme");
       setIsDarkMode(true);
     } else {
       document.body.classList.remove("dark-theme");
       setIsDarkMode(false);
     }
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleMediaQueryChange = (e) => {
+      if (!localStorage.getItem("theme")) {
+        const systemTheme = e.matches ? "dark" : "light";
+        if (systemTheme === "dark") {
+          document.body.classList.add("dark-theme");
+          setIsDarkMode(true);
+        } else {
+          document.body.classList.remove("dark-theme");
+          setIsDarkMode(false);
+        }
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    return () =>
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
   }, []);
 
   useEffect(() => {
@@ -52,18 +78,21 @@ const WeatherApp = () => {
     if (!city) return;
     fetchWeather(city);
     <Forecast />;
-    <HourlyWeather/>;
+    <HourlyWeather />;
   };
 
   const changeTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    if (isDarkMode) {
-      document.body.classList.remove("dark-theme");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.body.classList.add("dark-theme");
-      localStorage.setItem("theme", "dark");
-    }
+    setIsDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      if (newMode) {
+        document.body.classList.add("dark-theme");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.body.classList.remove("dark-theme");
+        localStorage.setItem("theme", "light");
+      }
+      return newMode;
+    });
   };
 
   const sunsetTime = weather
@@ -90,7 +119,7 @@ const WeatherApp = () => {
           </button>
         </div>
         <button className="toggle-button" onClick={changeTheme}>
-          {isDarkMode ? "LightMode" : "DarkMode"}
+          Change Mode
         </button>
       </nav>
       <div className="container">
