@@ -6,6 +6,7 @@ const HourlyWeather = () => {
   const [hourlyForecast, setHourlyForecast] = useState([]);
   const { city } = useCity();
 
+  //API FOR EVERY 3 HOURS
   const fetchForecast = async (city) => {
     try {
       const response = await fetch(
@@ -37,7 +38,10 @@ const HourlyWeather = () => {
   return (
     <>
       <h3>Hourly</h3>
-      <div className="container2">
+      <div
+        className={`container2 ${hourlyForecast.length === 0 ? "loading" : ""}`}
+      >
+        {/* FORMATTING THE DATE & GETTING THE ICON */}
         {hourlyForecast.length > 0 ? (
           hourlyForecast.map((dataTime, index) => {
             const rawDate = new Date(dataTime.dt * 1000);
@@ -58,7 +62,7 @@ const HourlyWeather = () => {
             );
           })
         ) : (
-          <div>Loading hourly forecast...</div>
+          <div className="loading">Loading hourly forecast...</div>
         )}
       </div>
     </>

@@ -6,6 +6,7 @@ export const Forecast = () => {
   const [forecast, setForecast] = useState(null);
   const { city } = useCity();
 
+  //API FOR EVERY DAY IN 12PM
   const fetchForecast = async (city) => {
     try {
       const response = await fetch(
@@ -33,6 +34,7 @@ export const Forecast = () => {
   return (
     <>
       <h3>Forecast</h3>
+      {/* FORMATTING THE DATE & GETTING THE ICON */}
       {forecast ? (
         forecast.map((item, index) => {
           const rawDate = new Date(item.dt * 1000);

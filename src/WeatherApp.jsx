@@ -10,7 +10,8 @@ const WeatherApp = () => {
   const { city, setCity } = useCity();
   const [icon, setIcon] = useState("");
 
-   const fetchWeather = async (city) => {
+  //API
+  const fetchWeather = async (city) => {
     try {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a3a03a15b0bafa2ba0a52f19baf4c6fe&units=metric`
@@ -29,6 +30,8 @@ const WeatherApp = () => {
       fetchWeather(city);
     }
   }, [city]);
+
+  //DarkMode
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -67,20 +70,6 @@ const WeatherApp = () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
   }, []);
 
-  useEffect(() => {
-    if (weather?.weather?.[0]?.id) {
-      const iconId = weather.weather[0].id;
-      setIcon(weatherIconChange(iconId));
-    }
-  }, [weather]);
-
-  const handleSearch = async () => {
-    if (!city) return;
-    fetchWeather(city);
-    <Forecast />;
-    <HourlyWeather />;
-  };
-
   const changeTheme = () => {
     setIsDarkMode((prevMode) => {
       const newMode = !prevMode;
@@ -95,6 +84,23 @@ const WeatherApp = () => {
     });
   };
 
+  //ICON
+  useEffect(() => {
+    if (weather?.weather?.[0]?.id) {
+      const iconId = weather.weather[0].id;
+      setIcon(weatherIconChange(iconId));
+    }
+  }, [weather]);
+
+  //SEARCH CITY
+  const handleSearch = async () => {
+    if (!city) return;
+    fetchWeather(city);
+    <Forecast />;
+    <HourlyWeather />;
+  };
+
+  //SUNRISE & SUNSET
   const sunsetTime = weather
     ? new Date(weather.sys.sunset * 1000).toLocaleTimeString()
     : null;
@@ -105,6 +111,7 @@ const WeatherApp = () => {
 
   return (
     <>
+      {/* NAVBAR */}
       <nav>
         <div>Weather App</div>
         <div className="search">
@@ -122,15 +129,13 @@ const WeatherApp = () => {
           Change Mode
         </button>
       </nav>
-      <div className="container">
-        <div className="main title grid"></div>
-      </div>
+      {/* ACTUAL WEATHER */}
       {weather ? (
         <div className="actual grid">
           <div className="actualImage grid card">
             <img src={icon} className="weatherIcon" />
             <div className="title">{weather.name}</div>
-            <div>{weather.weather[0].main}</div>
+            <div className="description">{weather.weather[0].main}</div>
             <div className="main_temp">
               {Math.floor(Math.round(weather.main.temp))} °C
             </div>
