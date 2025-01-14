@@ -1,10 +1,11 @@
 # React WeatherApp
 
-WeatherApp je jednoduchá aplikace pro zobrazení aktuálního počasí a předpovědi. Umožňuje uživatelům vyhledávat počasí podle města a zobrazovat podrobnosti o počasí každé 3 hodiny v daný den a na dalších 5 dnů.
+WeatherApp is a simple application for displaying current weather and forecasts. It allows users to search for weather by city and view weather details every 3 hours for the current day and the next 5 days.
 
-## Funkce
-- Zobrazení aktuálního počasí
-- Předpověď každé 3 hodiny v daný den
-- Předpověď počasí na 5 dnů dopředu
-- Možnost vyhledávání měst
-- Možnost Light/Dark Mode
+# Features:
+
+- Display current weather
+- Forecast every 3 hours for the current day
+- 5-day weather forecast
+- City search functionality
+- Light/Dark Mode option
